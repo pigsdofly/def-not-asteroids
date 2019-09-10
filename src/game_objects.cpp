@@ -76,7 +76,7 @@ bool GameObject::checkBounds(int x, int y, int pW, int pH) {
 
 
 
-void Player::makePlayer(SDL_Renderer *renderer) {
+void Player::render(SDL_Renderer *renderer) {
     int rounded_x = round(pX);
     int rounded_y = round(pY);
     pBox = { rounded_x, rounded_y, pW, pH};

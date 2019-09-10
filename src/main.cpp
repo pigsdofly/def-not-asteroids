@@ -72,10 +72,11 @@ int main(int argc, char* argv[])
         int square_height = SCREEN_HEIGHT/10;
         int x_iter, y_iter;
         bool pressed[] = {false, false, false, false};
+        bool shooting = false;
+
         Player p = Player("assets/Triangle.png",x_axis, y_axis, renderer);
         GameState *state = new GameState(&p);
-        p.makePlayer(renderer);
-        bool shooting = false;
+
         while(!quit) {
 
             while(SDL_PollEvent( &e ) != 0) {
@@ -86,8 +87,6 @@ int main(int argc, char* argv[])
                 else if(e.type == SDL_KEYDOWN) {
                     if (e.key.keysym.sym == SDLK_UP)
                         pressed[UP] = true;
-                    else if (e.key.keysym.sym == SDLK_DOWN)
-                        pressed[DOWN] = true;
                     if (e.key.keysym.sym == SDLK_LEFT)
                         pressed[LEFT] = true;
                     else if (e.key.keysym.sym == SDLK_RIGHT)
@@ -98,8 +97,6 @@ int main(int argc, char* argv[])
                 else if(e.type == SDL_KEYUP) {
                     if (e.key.keysym.sym == SDLK_UP)
                         pressed[UP] = false;
-                    else if (e.key.keysym.sym == SDLK_DOWN)
-                        pressed[DOWN] = false;
                     if (e.key.keysym.sym == SDLK_LEFT)
                         pressed[LEFT] = false;
                     else if (e.key.keysym.sym == SDLK_RIGHT)
@@ -118,7 +115,6 @@ int main(int argc, char* argv[])
 
             p.move(pressed);
 
-            p.makePlayer(renderer);
             state->render(renderer);
 
             SDL_RenderPresent(renderer);

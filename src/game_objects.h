@@ -36,7 +36,7 @@ class Player : public GameObject
 {
     public:
         Player(std::string, int, int, SDL_Renderer *renderer);
-        void makePlayer(SDL_Renderer *renderer);
+        void render(SDL_Renderer *renderer);
         SDL_Texture* pTexture;
         SDL_Rect pBox;
         void move(bool[]);

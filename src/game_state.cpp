@@ -26,6 +26,7 @@ void GameState::getState() {
 
 void GameState::render(SDL_Renderer *renderer) {
     
+    player->render(renderer);
     getEnemyPos();
     for( auto &enemy : enemies) {
         if (enemy != NULL)
