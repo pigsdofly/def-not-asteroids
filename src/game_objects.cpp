@@ -5,9 +5,14 @@ GameObject::GameObject() {
     return;
 }
 
-Enemy::Enemy(int x, int y) {
+Enemy::Enemy(int x, int y, int a) {
     eX = x;
     eY = y;
+
+    x_inc = 0.5;
+    y_inc = 0.5;
+    
+    angle = a;
 }
 
 
@@ -16,14 +21,13 @@ Projectile::Projectile(double xi, double yi, double startX, double startY) {
     y_inc = yi;
     pX = startX;
     pY = startY;
-    //state = s;
 
     pW = 10;
     pH = 10;
 }
 
 Player::Player(std::string path, int x, int y, SDL_Renderer *renderer) {
-    
+    // SDL setup stuff
     SDL_Texture* newTexture = NULL;
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
@@ -32,10 +36,11 @@ Player::Player(std::string path, int x, int y, SDL_Renderer *renderer) {
 
     pX = x - (pW/2);
     pY = y - (pH/2);
+    // set degrees to 270 so that player is facing north at start
     degrees = 270;
     
     SDL_FreeSurface(loadedSurface);
-    projectile = NULL;
+    // initialise array of projectiles to null
     for (auto &p : projectiles) {
         p = NULL;
     }
@@ -44,7 +49,7 @@ Player::Player(std::string path, int x, int y, SDL_Renderer *renderer) {
 }
 
 void Projectile::render(SDL_Renderer *renderer) {
-
+// render function for projectiles
     int rounded_x = round(pX);
 
     int rounded_y = round(pY);
@@ -127,10 +132,27 @@ void Player::shoot() {
     index = (index + 1) % 10;
 }
 
+void Enemy::move() {
+    
+    double rads = angle * M_PI / 180.0;
+
+    eX += cos(rads) * x_inc;
+    eY += sin(rads) * y_inc;
+
+    if(!(eX < (SCREEN_WIDTH - eW) && eX > 0) )
+        x_inc *= -1;
+    if(!(eY < SCREEN_HEIGHT - eH && eY > 0) )
+        y_inc *= -1;
+    
+}
+
 void Enemy::render(SDL_Renderer *renderer) {
+
     int rounded_x = round(eX);
 
     int rounded_y = round(eY);
+
+
     
     SDL_Rect pBox = { rounded_x, rounded_y, eW, eH };
 
@@ -142,7 +164,7 @@ void Enemy::render(SDL_Renderer *renderer) {
 
 }
 
-bool Enemy::checkBounds(double x, double y) {
+bool Enemy::inBounds(double x, double y) {
     int pX = round(x);
     int pY = round(y);
     int rX = round(eX);

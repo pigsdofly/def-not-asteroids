@@ -16,7 +16,7 @@ class GameState
 {
     public:
         GameState(Player *p);
-        void getState();
+        void gameActions();
         void spawnEnemies();
         bool getEnemyPos();
         bool checkEnemies();

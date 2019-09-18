@@ -79,6 +79,10 @@ int main(int argc, char* argv[])
 
         while(!quit) {
 
+            if(!(state->checkEnemies())) {
+                quit = true;
+                std::cout << "You win!" << std::endl;
+            }
             while(SDL_PollEvent( &e ) != 0) {
                 if(e.type == SDL_QUIT)
                 {

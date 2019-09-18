@@ -16,11 +16,11 @@ void GameState::spawnEnemies() {
             y = rand() % SCREEN_HEIGHT;
         } while (x != player->pX && y != player->pY);
         angle = rand() % 360;
-        enemy = new Enemy(x,y);
+        enemy = new Enemy(x,y, angle);
     }
 }
 
-void GameState::getState() {
+void GameState::gameActions() {
     
 }
 
@@ -29,14 +29,21 @@ void GameState::render(SDL_Renderer *renderer) {
     player->render(renderer);
     getEnemyPos();
     for( auto &enemy : enemies) {
-        if (enemy != NULL)
+        if (enemy != NULL) {
+            enemy->move();
             enemy->render(renderer);
+
+        }
     }
 
 }
 
 bool GameState::checkEnemies() {
-    return true;
+    for (auto &enemy : enemies) {
+        if(enemy != NULL)
+            return true;
+    }
+    return false;
 }
 
 bool GameState::getEnemyPos() {
@@ -47,7 +54,7 @@ bool GameState::getEnemyPos() {
             pY = projectile->pY;
             for (auto &enemy : enemies) {
                 if(enemy != NULL)
-                    if(enemy->checkBounds(pX, pY)) {
+                    if(enemy->inBounds(pX, pY)) {
                         std::cout<<"Its a hit!"<<std::endl;
                         projectile->finished = true;
                         enemy->killed = true;
